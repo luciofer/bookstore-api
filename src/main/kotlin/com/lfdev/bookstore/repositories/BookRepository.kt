@@ -1,9 +1,9 @@
 package com.lfdev.bookstore.repositories
 
-import com.lfdev.bookstore.domain.Book
+import com.lfdev.bookstore.domain.book.BookEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface BookRepository : JpaRepository<Book, String> {
+interface BookRepository : JpaRepository<BookEntity, String> {
 }
