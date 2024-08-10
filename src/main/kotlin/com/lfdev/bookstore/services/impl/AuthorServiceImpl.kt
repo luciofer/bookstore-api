@@ -12,4 +12,8 @@ class AuthorServiceImpl(private val authorRepository: AuthorRepository): AuthorS
         return authorRepository.save(authorEntity)
     }
 
+    override fun list(): List<AuthorEntity> {
+        return authorRepository.findAll()
+    }
+
 }

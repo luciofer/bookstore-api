@@ -5,8 +5,8 @@ import com.lfdev.bookstore.services.AuthorService
 import com.lfdev.bookstore.toAuthorDTO
 import com.lfdev.bookstore.toAuthorEntity
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,4 +21,12 @@ class AuthorController(private val authorService: AuthorService) {
         val createdAuthor = authorService.save(authorDTO.toAuthorEntity()).toAuthorDTO()
         return ResponseEntity(createdAuthor, HttpStatus.CREATED)
     }
+
+    @GetMapping
+    fun getManyAuthors(): ResponseEntity<List<AuthorDTO>>{
+        val authors = authorService.list().map { it.toAuthorDTO() }
+        return ResponseEntity(authors, HttpStatus.OK)
+    }
+
+
 }
