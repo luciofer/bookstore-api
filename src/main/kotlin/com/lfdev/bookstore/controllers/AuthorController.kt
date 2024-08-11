@@ -22,7 +22,7 @@ class AuthorController(private val authorService: AuthorService) {
         return ResponseEntity(createdAuthor, HttpStatus.CREATED)
     }
 
-    @GetMapping
+    @GetMapping("/v1")
     fun getManyAuthors(): ResponseEntity<List<AuthorDTO>>{
         val authors = authorService.list().map { it.toAuthorDTO() }
         return ResponseEntity(authors, HttpStatus.OK)
