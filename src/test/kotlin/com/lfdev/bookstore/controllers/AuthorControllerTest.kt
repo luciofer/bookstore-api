@@ -77,7 +77,7 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             emptyList()
         }
 
-        mockMvc.get(AUTHORS_BASE_URL){
+        mockMvc.get("/${AUTHORS_BASE_URL}"){
             contentType = MediaType.APPLICATION_JSON
             accept = MediaType.APPLICATION_JSON
         }.andExpect {
@@ -94,7 +94,7 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             listOf(testAuthorEntity(id = 1))
         }
 
-        mockMvc.get(AUTHORS_BASE_URL){
+        mockMvc.get("/${AUTHORS_BASE_URL}"){
             contentType = MediaType.APPLICATION_JSON
             accept = MediaType.APPLICATION_JSON
         }.andExpect {
