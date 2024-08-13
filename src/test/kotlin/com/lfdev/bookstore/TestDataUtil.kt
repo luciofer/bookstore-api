@@ -1,4 +1,4 @@
-package com.lfdev.bookstore
+package com.lfdev.bookstore.com.lfdev.bookstore
 
 import com.lfdev.bookstore.domain.author.AuthorDTO
 import com.lfdev.bookstore.domain.author.AuthorEntity

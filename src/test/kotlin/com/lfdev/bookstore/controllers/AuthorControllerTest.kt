@@ -3,8 +3,8 @@ package com.lfdev.bookstore.controllers
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lfdev.bookstore.domain.author.AuthorEntity
 import com.lfdev.bookstore.services.AuthorService
-import com.lfdev.bookstore.testAuthorDTO
-import com.lfdev.bookstore.testAuthorEntity
+import com.lfdev.bookstore.com.lfdev.bookstore.testAuthorDTO
+import com.lfdev.bookstore.com.lfdev.bookstore.testAuthorEntity
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.verify
@@ -77,7 +77,7 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             emptyList()
         }
 
-        mockMvc.get("/${AUTHORS_BASE_URL}"){
+        mockMvc.get("${AUTHORS_BASE_URL}/"){
             contentType = MediaType.APPLICATION_JSON
             accept = MediaType.APPLICATION_JSON
         }.andExpect {
@@ -94,7 +94,7 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             listOf(testAuthorEntity(id = 1))
         }
 
-        mockMvc.get("/${AUTHORS_BASE_URL}"){
+        mockMvc.get("${AUTHORS_BASE_URL}/"){
             contentType = MediaType.APPLICATION_JSON
             accept = MediaType.APPLICATION_JSON
         }.andExpect {
@@ -103,6 +103,42 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             content { jsonPath("$[0].name", CoreMatchers.equalTo("John Doe")) }
             content { jsonPath("$[0].description", CoreMatchers.equalTo("Some description")) }
             content { jsonPath("$[0].image", CoreMatchers.equalTo("author-image.png")) }
+        }
+    }
+
+    @Test
+    fun `test that get Author returns http 404 when author not found`(){
+        every {
+            authorService.getAuthor(any())
+        } answers {
+            null
+        }
+
+        mockMvc.get("${AUTHORS_BASE_URL}/999"){
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isNotFound() }
+        }
+    }
+
+    @Test
+    fun `test that get returns http 200 and Author, when author found in the database`(){
+        every {
+            authorService.getAuthor(any())
+        } answers {
+            testAuthorEntity(id = 999)
+        }
+
+        mockMvc.get("${AUTHORS_BASE_URL}/999"){
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            content { jsonPath("$.id", CoreMatchers.equalTo(999)) }
+            content { jsonPath("$.name", CoreMatchers.equalTo("John Doe")) }
+            content { jsonPath("$.description", CoreMatchers.equalTo("Some description")) }
+            content { jsonPath("$.image", CoreMatchers.equalTo("author-image.png")) }
         }
     }
 
