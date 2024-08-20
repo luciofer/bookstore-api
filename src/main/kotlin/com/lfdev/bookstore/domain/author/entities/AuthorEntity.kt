@@ -1,4 +1,4 @@
-package com.lfdev.bookstore.domain.author
+package com.lfdev.bookstore.domain.author.entities
 
 import jakarta.persistence.*
 

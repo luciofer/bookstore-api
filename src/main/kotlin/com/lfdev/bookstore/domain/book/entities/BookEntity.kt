@@ -1,6 +1,6 @@
-package com.lfdev.bookstore.domain.book
+package com.lfdev.bookstore.domain.book.entities
 
-import com.lfdev.bookstore.domain.author.AuthorEntity
+import com.lfdev.bookstore.domain.author.entities.AuthorEntity
 import jakarta.persistence.*
 
 @Entity

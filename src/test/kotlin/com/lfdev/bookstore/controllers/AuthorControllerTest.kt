@@ -1,7 +1,7 @@
 package com.lfdev.bookstore.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.lfdev.bookstore.domain.author.AuthorEntity
+import com.lfdev.bookstore.domain.author.entities.AuthorEntity
 import com.lfdev.bookstore.services.AuthorService
 import com.lfdev.bookstore.com.lfdev.bookstore.testAuthorDTO
 import com.lfdev.bookstore.com.lfdev.bookstore.testAuthorEntity

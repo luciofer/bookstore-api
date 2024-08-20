@@ -1,7 +1,6 @@
-package com.lfdev.bookstore.domain.book
+package com.lfdev.bookstore.domain.book.dto
 
-import com.lfdev.bookstore.domain.author.AuthorDTO
-import jakarta.persistence.*
+import com.lfdev.bookstore.domain.author.dto.AuthorDTO
 
 data class BookDTO(
     val isbn: String,

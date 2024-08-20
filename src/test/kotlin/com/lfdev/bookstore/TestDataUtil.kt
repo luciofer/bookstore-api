@@ -1,7 +1,7 @@
 package com.lfdev.bookstore.com.lfdev.bookstore
 
-import com.lfdev.bookstore.domain.author.AuthorDTO
-import com.lfdev.bookstore.domain.author.AuthorEntity
+import com.lfdev.bookstore.domain.author.dto.AuthorDTO
+import com.lfdev.bookstore.domain.author.entities.AuthorEntity
 
 
 fun testAuthorDTO(id: Long? = null) = AuthorDTO(

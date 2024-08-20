@@ -1,4 +1,4 @@
-package com.lfdev.bookstore.domain.author
+package com.lfdev.bookstore.domain.author.dto
 
 import jakarta.persistence.Column
 import jakarta.persistence.GeneratedValue
