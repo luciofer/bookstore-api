@@ -1,10 +1,9 @@
 package com.lfdev.bookstore.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.lfdev.bookstore.com.lfdev.bookstore.*
 import com.lfdev.bookstore.domain.author.entities.AuthorEntity
 import com.lfdev.bookstore.services.AuthorService
-import com.lfdev.bookstore.com.lfdev.bookstore.testAuthorDTO
-import com.lfdev.bookstore.com.lfdev.bookstore.testAuthorEntity
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.verify
@@ -15,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
+import org.springframework.test.web.servlet.*
 
 
 private const val  AUTHORS_BASE_URL = "/authors/v1"
@@ -116,6 +112,7 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             status { isOk() }
             content { jsonPath("$[0].id", CoreMatchers.equalTo(1)) }
             content { jsonPath("$[0].name", CoreMatchers.equalTo("John Doe")) }
+            content { jsonPath("$[0].age", CoreMatchers.equalTo(28)) }
             content { jsonPath("$[0].description", CoreMatchers.equalTo("Some description")) }
             content { jsonPath("$[0].image", CoreMatchers.equalTo("author-image.png")) }
         }
@@ -152,6 +149,7 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             status { isOk() }
             content { jsonPath("$.id", CoreMatchers.equalTo(999)) }
             content { jsonPath("$.name", CoreMatchers.equalTo("John Doe")) }
+            content { jsonPath("$.age", CoreMatchers.equalTo(28)) }
             content { jsonPath("$.description", CoreMatchers.equalTo("Some description")) }
             content { jsonPath("$.image", CoreMatchers.equalTo("author-image.png")) }
         }
@@ -173,6 +171,7 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             status { isOk() }
             content { jsonPath("$.id", CoreMatchers.equalTo(999)) }
             content { jsonPath("$.name", CoreMatchers.equalTo("John Doe")) }
+            content { jsonPath("$.age", CoreMatchers.equalTo(28)) }
             content { jsonPath("$.description", CoreMatchers.equalTo("Some description")) }
             content { jsonPath("$.image", CoreMatchers.equalTo("author-image.png")) }
         }
@@ -183,7 +182,7 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
     fun `test that full update Author returns HTTP 400 when IllegalStateException is thrown`(){
         every {
             authorService.fullUpdate(any(), any())
-        } throws(IllegalStateException())
+        } throws IllegalStateException()
 
         mockMvc.put("${AUTHORS_BASE_URL}/999"){
             contentType = MediaType.APPLICATION_JSON
@@ -193,6 +192,43 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             status { isBadRequest() }
         }
 
+    }
+
+    @Test
+    fun `test that partial update Author returns http 400 on IllegalStateException`(){
+        every {
+            authorService.partialUpdate(any(), any())
+        } throws IllegalStateException()
+
+        mockMvc.patch("${AUTHORS_BASE_URL}/21"){
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(testAuthorUpdateRequestDtoB(id = 21))
+        }.andExpect {
+            status { isBadRequest()}
+        }
+    }
+
+    @Test
+    fun `test that partial update returns http 200 and updated author`(){
+        every {
+            authorService.partialUpdate(any(), any())
+        } answers {
+            testAuthorEntityB(id = 21)
+        }
+
+        mockMvc.patch("${AUTHORS_BASE_URL}/21"){
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(testAuthorUpdateRequestDtoB(id = 21))
+        }.andExpect {
+            status { isOk()}
+            content { jsonPath("$.id", CoreMatchers.equalTo(21)) }
+            content { jsonPath("$.name", CoreMatchers.equalTo("Peter")) }
+            content { jsonPath("$.age", CoreMatchers.equalTo(43)) }
+            content { jsonPath("$.description", CoreMatchers.equalTo("cop")) }
+            content { jsonPath("$.image", CoreMatchers.equalTo("peter.png")) }
+        }
     }
 
 

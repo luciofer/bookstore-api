@@ -1,6 +1,8 @@
 package com.lfdev.bookstore.com.lfdev.bookstore
 
+import com.lfdev.bookstore.domain.author.AuthorUpdateRequest
 import com.lfdev.bookstore.domain.author.dto.AuthorDTO
+import com.lfdev.bookstore.domain.author.dto.AuthorUpdateRequestDTO
 import com.lfdev.bookstore.domain.author.entities.AuthorEntity
 
 
@@ -24,6 +26,22 @@ fun testAuthorEntityB(id: Long? = null) = AuthorEntity(
         id = id,
         name = "Peter",
         age = 43,
-        description = "Cop",
-        image = "other.jpeg"
+        description = "cop",
+        image = "peter.png"
+)
+
+fun testAuthorUpdateRequestDtoB(id: Long? = null) = AuthorUpdateRequestDTO(
+        id = id,
+        name = "Peter",
+        age = 43,
+        description = "cop",
+        image = "peter.png"
+)
+
+fun testAuthorUpdateRequestB(id: Long? = null) = AuthorUpdateRequest(
+        id = id,
+        name = "Peter",
+        age = 43,
+        description = "cop",
+        image = "peter.png"
 )
