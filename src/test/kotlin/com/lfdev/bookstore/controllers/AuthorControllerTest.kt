@@ -17,7 +17,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 
 
-private const val  AUTHORS_BASE_URL = "/authors/v1"
+private const val  AUTHORS_BASE_URL = "/v1/authors"
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -229,6 +229,22 @@ class AuthorControllerTest @Autowired constructor(private val mockMvc: MockMvc, 
             content { jsonPath("$.description", CoreMatchers.equalTo("cop")) }
             content { jsonPath("$.image", CoreMatchers.equalTo("peter.png")) }
         }
+    }
+
+    @Test
+    fun `test that delete author returns http 204 on successful delete`(){
+        every {
+            authorService.delete(any())
+        } answers {}
+
+        mockMvc.delete("${AUTHORS_BASE_URL}/21"){
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isNoContent() }
+        }
+
+
     }
 
 

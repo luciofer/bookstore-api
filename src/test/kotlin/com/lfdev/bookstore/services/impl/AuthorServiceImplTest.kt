@@ -6,6 +6,7 @@ import com.lfdev.bookstore.domain.author.AuthorUpdateRequest
 import com.lfdev.bookstore.domain.author.entities.AuthorEntity
 import com.lfdev.bookstore.repositories.AuthorRepository
 import com.lfdev.bookstore.services.impl.AuthorServiceImpl
+import jakarta.transaction.Transactional
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -16,6 +17,7 @@ import org.springframework.test.annotation.DirtiesContext
 
 
 @SpringBootTest
+@Transactional
 class AuthorServiceImplTest @Autowired constructor(private val underTest: AuthorServiceImpl, private val authorRepository: AuthorRepository) {
 
     @Test
@@ -44,7 +46,6 @@ class AuthorServiceImplTest @Autowired constructor(private val underTest: Author
     }
 
     @Test
-    @DirtiesContext
     fun `test that list returns authors when authors in the database`() {
         val savedAuthor = authorRepository.save(testAuthorEntity())
         val expected = listOf(savedAuthor)
@@ -59,7 +60,6 @@ class AuthorServiceImplTest @Autowired constructor(private val underTest: Author
     }
 
     @Test
-    @DirtiesContext
     fun `test that get Author returns author when author in the database`() {
         val savedAuthor = authorRepository.save(testAuthorEntity())
         val result = underTest.getAuthor(savedAuthor.id!!)
@@ -68,7 +68,6 @@ class AuthorServiceImplTest @Autowired constructor(private val underTest: Author
     }
 
     @Test
-    @DirtiesContext
     fun `test that full update successfully updates the author in the database`(){
         val existingAuthor = authorRepository.save(testAuthorEntity())
 
@@ -202,6 +201,25 @@ class AuthorServiceImplTest @Autowired constructor(private val underTest: Author
         val retrievedAuthor = authorRepository.findByIdOrNull(existingAuthorId)
         assertThat(retrievedAuthor).isNotNull()
         assertThat(retrievedAuthor).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test that delete author deletes an existing author in the database`(){
+        val existingAuthor = authorRepository.save(testAuthorEntity(1))
+        val existingAuthorId = existingAuthor.id!!
+
+        underTest.delete(existingAuthorId)
+
+        assertThat(authorRepository.existsById(existingAuthorId)).isFalse()
+    }
+
+    @Test
+    fun `test that delete author deletes a non-existing author in the database`(){
+        val nonExistingId = 999L
+
+        underTest.delete(nonExistingId)
+
+        assertThat(authorRepository.existsById(nonExistingId)).isFalse()
     }
 
 }

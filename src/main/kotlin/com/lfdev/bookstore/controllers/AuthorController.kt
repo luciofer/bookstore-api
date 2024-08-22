@@ -8,6 +8,7 @@ import com.lfdev.bookstore.toAuthorEntity
 import com.lfdev.bookstore.toAuthorUpdateRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping("/authors/v1")
+@RequestMapping("/v1/authors")
 class AuthorController(private val authorService: AuthorService) {
 
     @PostMapping("/create")
@@ -64,6 +65,17 @@ class AuthorController(private val authorService: AuthorService) {
         } catch (ex: IllegalStateException){
             ResponseEntity(HttpStatus.BAD_REQUEST)
         }
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteAuthor(@PathVariable id: Long): ResponseEntity<Unit>{
+        return try {
+            authorService.delete(id)
+            ResponseEntity(HttpStatus.NO_CONTENT)
+        } catch (ex: IllegalArgumentException) {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+
     }
 
 }
